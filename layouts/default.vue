@@ -35,7 +35,7 @@
       <transition name="slide-fade">
         <div
           v-if="isMenuOpen"
-          class="fixed top-16 left-0 w-3/4 bg-gray-100 h-screen p-4 z-10 sm:hidden"
+          class="fixed top-16 left-0 w-3/4 bg-gray-100 h-screen p-4 z-10 sm:hidden max-sm:z-[1]"
         >
           <ul>
             <li v-for="link in links" :key="link.name">
@@ -52,7 +52,7 @@
       </transition>
 
       <!-- Main Content -->
-      <main class="w-full sm:w-3/4 px-6 py-8 ml-auto bg-gray-50 max-sm:px-4 max-sm:py-4">
+      <main class="w-full sm:w-3/4 px-6 py-8 ml-auto bg-gray-50 max-sm:p-4">
         <NuxtPage />
       </main>
     </div>

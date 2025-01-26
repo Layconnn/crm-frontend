@@ -107,7 +107,7 @@
       v-if="isModalOpen"
       class="fixed transition-all duration-500 ease-in-out inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-20"
     >
-      <div class="bg-white p-6 rounded shadow-lg max-w-sm w-full">
+      <div class="bg-white p-6 rounded shadow-lg max-w-sm w-[20rem]">
         <h3 class="text-lg font-semibold mb-4">Edit Contact</h3>
 
         <form @submit.prevent="submitEdit">
@@ -262,8 +262,6 @@ export default {
         router.push("/login"); // Redirect to login if not authenticated
         return false;
       }
-      this.fetchContacts();
-      showToast('Contacts Fetched!')
     },
     async fetchContacts() {
       try {
@@ -282,6 +280,7 @@ export default {
         }
       } finally {
         this.loading = false;
+        showToast('Contacts Fetched!')
       }
     },
 
@@ -333,6 +332,7 @@ export default {
         this.activeContactId = null;
       } catch (error) {
         console.error("Error deleting contact:", error);
+        
         this.deleteLoading = false
       } finally{
         this.deleteLoading = false
@@ -358,6 +358,6 @@ export default {
   },
   mounted() {
     this.checkAuthentication();
-  },
+  }
 };
 </script>

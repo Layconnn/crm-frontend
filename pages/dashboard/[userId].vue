@@ -197,7 +197,7 @@
                 @click="viewTask(activity._id)"
                 class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
               >
-                View
+              <template v-if="viewLoadingTask === activity._id"><div class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"></div></template> <template v-else>View</template>
               </button>
             </div>
           </div>
@@ -277,7 +277,7 @@
             @click="viewContact(activity._id)"
             class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 max-w-[4rem] justify-self-end"
           >
-            View
+          <template v-if="viewLoadingContact === activity._id"><div class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"></div></template> <template v-else>View</template>
           </button>
         </div>
       </template>
@@ -292,7 +292,7 @@
       v-if="showModal"
       class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
     >
-      <div class="bg-white p-8 rounded-lg shadow-xl w-[28rem] relative max-sm:w-[350px]">
+      <div class="bg-white p-8 rounded-lg shadow-xl w-[28rem] relative max-sm:w-[20rem]">
         <!-- Close Button -->
         <button
           @click="closeModal"
@@ -555,6 +555,8 @@ const recentActivities = ref({ data: [] }); // Initialize as an empty array to a
 const showModal = ref(false);
 const selectedActivity = ref(null);
 const loading = ref(true);
+const viewLoadingTask = ref(null);
+const viewLoadingContact = ref(null);
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -571,18 +573,11 @@ const handleError = (error) => {
 };
 
 const viewTask = async (taskId) => {
+  viewLoadingTask.value = taskId
   try {
     // Fetch and update recentActivities
     recentActivities.value = await fetchRecentActivities();
 
-    // Check if recentActivities.data is defined and is an array
-    // if (
-    //   !recentActivities.value?.data ||
-    //   !Array.isArray(recentActivities.value.data)
-    // ) {
-    //   console.error("recentActivities.data is undefined or not an array");
-    //   return;
-    // }
 
     // Find the task using .find() instead of .some()
     const task = recentActivities.value.data.find(
@@ -596,9 +591,13 @@ const viewTask = async (taskId) => {
       console.log("showModal:", showModal);
     } else {
       console.error("Task not found");
+      viewLoadingTask.value = null
     }
   } catch (error) {
     console.error("Error in viewTask:", error);
+    viewLoadingTask.value = null
+  } finally{
+    viewLoadingTask.value = null
   }
 };
 
@@ -607,6 +606,7 @@ const closeModal = () => {
 };
 
 const viewContact = async (contactId) => {
+  viewLoadingContact.value = contactId
   try {
     // Fetch and update recentActivities (replace with your actual method for fetching contacts)
     recentActivities.value = await fetchRecentActivities();
@@ -630,9 +630,13 @@ const viewContact = async (contactId) => {
       showModal.value = true; // Ensure showModal is a ref
     } else {
       console.error("Contact not found");
+      viewLoadingContact.value = null
     }
   } catch (error) {
     console.error("Error in viewContact:", error);
+    viewLoadingContact.value = null
+  } finally {
+    viewLoadingContact.value = null
   }
 };
 
@@ -648,7 +652,7 @@ const fetchData = async () => {
     contactSummary.value = await fetchContactSummary(); // Correctly assign the fetched data
   } catch (error) {
     handleError(error); // Display a user-friendly error message
-    showToast(error);
+    showToast('Unkwon error.', 'error');
   } finally {
     loading.value = false; // Ensure loading state is always reset
     showToast('Data Fetched!')

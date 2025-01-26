@@ -13,8 +13,9 @@
             id="title"
             v-model="newTaskData.title"
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            required
+            :class="{ 'border-red-500': errors.title }"
           />
+          <p v-if="errors.title" class="mt-2 text-sm text-red-600">{{ errors.title }}</p>
         </div>
 
         <div>
@@ -23,8 +24,10 @@
             id="description"
             v-model="newTaskData.description"
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg resize-none"
+            :class="{ 'border-red-500': errors.description }"
             rows="4"
           ></textarea>
+          <p v-if="errors.description" class="mt-2 text-sm text-red-600">{{ errors.description }}</p>
         </div>
 
         <div>
@@ -33,10 +36,13 @@
             id="status"
             v-model="newTaskData.status"
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            :class="{ 'border-red-500': errors.status }"
           >
+            <option value=""></option>
             <option value="Pending">Pending</option>
             <option value="Completed">Completed</option>
           </select>
+          <p v-if="errors.status" class="mt-2 text-sm text-red-600">{{ errors.status }}</p>
         </div>
 
         <div>
@@ -45,11 +51,14 @@
             id="priority"
             v-model="newTaskData.priority"
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+             :class="{ 'border-red-500': errors.priority }"
           >
+            <option value=""></option>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
           </select>
+          <p v-if="errors.priority" class="mt-2 text-sm text-red-600">{{ errors.priority }}</p>
         </div>
 
         <div>
@@ -59,8 +68,9 @@
             id="dueDate"
             v-model="newTaskData.dueDate"
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            required
+             :class="{ 'border-red-500': errors.dueDate }"
           />
+          <p v-if="errors.priority" class="mt-2 text-sm text-red-600">{{ errors.dueDate }}</p>
         </div>
 
         <button
@@ -180,7 +190,7 @@
       v-if="showEditModal"
       class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-20"
     >
-      <div class="bg-white rounded p-6 w-96">
+      <div class="bg-white rounded p-6 w-96 max-sm:w-[20rem]">
         <h2 class="text-lg font-bold mb-4">Edit Task</h2>
         <form @submit.prevent="submitEdit">
           <div class="mb-4">
@@ -309,6 +319,13 @@ const newTaskData = ref({
   status: "Pending",
 }); // Data for creating a new task
 const editTaskData = ref({}); // Data for editing a task
+const errors = ref({
+   title: '',
+   description: '',
+   status: '',
+   priority: '',
+   dueDate: '',
+ });
 
 // Handle errors
 const handleError = (error) => {
@@ -344,6 +361,7 @@ const fetchTasksData = async () => {
     });
   } catch (error) {
     handleError(error);
+    showToast('Unkwown Error.', 'error')
   } finally {
     loading.value = false;
     showToast('Tasks Fetched!')
@@ -375,6 +393,28 @@ const formatToISODate = (dateString) => {
 
 // Create a new task
 const createTaskData = async () => {
+
+  // Validate fields
+  if (!newTaskData.value.title) {
+        errors.value.title = "Title is required.";
+      }
+      if (!newTaskData.value.description) {
+        errors.value.description = "Description is required.";
+      }
+      if (!newTaskData.value.status) {
+        errors.value.status = "Stage is required.";
+      }
+      if (!newTaskData.value.priority) {
+        errors.value.priority = "Value is required."
+      }
+      if (!newTaskData.value.dueDate) {
+        errors.value.dueDate = "Priority is required.";
+      }
+
+      if (!newTaskData.value.title || !newTaskData.description || !newTaskData.value.status || !newTaskData.value.priority || !newTaskData.value.dueDate ) {
+    return;
+  }
+
   try {
     createLoading.value = true
 
@@ -404,7 +444,7 @@ const createTaskData = async () => {
   } catch (error) {
     createLoading.value = false
     console.error("Error creating task:", error);
-    alert("Failed to create task. Please try again.");
+    showToast('Failed to create task.', 'error')
   } finally {
     createLoading.value = false
     showToast('Task Created!')
@@ -423,6 +463,7 @@ const deleteTaskData = async (taskId) => {
   } catch (error) {
     deleteLoading.value = false
     handleError(error);
+    showToast('Failed to delete!', 'error')
   } finally {
     deleteLoading.value = false
     showToast('Task Deleted!')
@@ -456,6 +497,7 @@ const submitEdit = async () => {
   } catch (error) {
     loadingEdit.value = false
     handleError(error);
+    showToast('Failed to edit task!', 'error')
   } finally {
     loadingEdit.value = false;
     showToast('Task Editted!')
