@@ -7,7 +7,9 @@
       <h2 class="text-2xl font-semibold text-blue-600 mb-6">Create New Task</h2>
       <form @submit.prevent="createTaskData" class="space-y-6">
         <div>
-          <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+          <label for="title" class="block text-sm font-medium text-gray-700"
+            >Title</label
+          >
           <input
             type="text"
             id="title"
@@ -15,11 +17,17 @@
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
             :class="{ 'border-red-500': errors.title }"
           />
-          <p v-if="errors.title" class="mt-2 text-sm text-red-600">{{ errors.title }}</p>
+          <p v-if="errors.title" class="mt-2 text-sm text-red-600">
+            {{ errors.title }}
+          </p>
         </div>
 
         <div>
-          <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+          <label
+            for="description"
+            class="block text-sm font-medium text-gray-700"
+            >Description</label
+          >
           <textarea
             id="description"
             v-model="newTaskData.description"
@@ -27,11 +35,15 @@
             :class="{ 'border-red-500': errors.description }"
             rows="4"
           ></textarea>
-          <p v-if="errors.description" class="mt-2 text-sm text-red-600">{{ errors.description }}</p>
+          <p v-if="errors.description" class="mt-2 text-sm text-red-600">
+            {{ errors.description }}
+          </p>
         </div>
 
         <div>
-          <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+          <label for="status" class="block text-sm font-medium text-gray-700"
+            >Status</label
+          >
           <select
             id="status"
             v-model="newTaskData.status"
@@ -42,148 +54,168 @@
             <option value="Pending">Pending</option>
             <option value="Completed">Completed</option>
           </select>
-          <p v-if="errors.status" class="mt-2 text-sm text-red-600">{{ errors.status }}</p>
+          <p v-if="errors.status" class="mt-2 text-sm text-red-600">
+            {{ errors.status }}
+          </p>
         </div>
 
         <div>
-          <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
+          <label for="priority" class="block text-sm font-medium text-gray-700"
+            >Priority</label
+          >
           <select
             id="priority"
             v-model="newTaskData.priority"
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-             :class="{ 'border-red-500': errors.priority }"
+            :class="{ 'border-red-500': errors.priority }"
           >
             <option value=""></option>
             <option value="Low">Low</option>
             <option value="Medium">Medium</option>
             <option value="High">High</option>
           </select>
-          <p v-if="errors.priority" class="mt-2 text-sm text-red-600">{{ errors.priority }}</p>
+          <p v-if="errors.priority" class="mt-2 text-sm text-red-600">
+            {{ errors.priority }}
+          </p>
         </div>
 
         <div>
-          <label for="dueDate" class="block text-sm font-medium text-gray-700">Due Date</label>
+          <label for="dueDate" class="block text-sm font-medium text-gray-700"
+            >Due Date</label
+          >
           <input
             type="date"
             id="dueDate"
             v-model="newTaskData.dueDate"
             class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-             :class="{ 'border-red-500': errors.dueDate }"
+            :class="{ 'border-red-500': errors.dueDate }"
           />
-          <p v-if="errors.priority" class="mt-2 text-sm text-red-600">{{ errors.dueDate }}</p>
+          <p v-if="errors.dueDate" class="mt-2 text-sm text-red-600">
+            {{ errors.dueDate }}
+          </p>
         </div>
 
         <button
           type="submit"
           class="w-full mt-4 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 text-lg"
         >
-        <template v-if="createLoading"><div class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"></div></template> <template v-else>Create Task</template>
+          <template v-if="createLoading"
+            ><div
+              class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"
+            ></div
+          ></template>
+          <template v-else>Create Task</template>
         </button>
       </form>
     </div>
     <div>
-  <h1 class="text-2xl font-bold mb-4">Task List</h1>
+      <h1 class="text-2xl font-bold mb-4">Task List</h1>
 
-  <!-- Scrollable Container -->
-  <div class="overflow-x-auto scrollbar-hide">
-    <!-- Task Table Header -->
-    <div class="grid grid-cols-6 min-w-[850px] gap-4 font-medium bg-gray-200 p-4 rounded">
-      <div>Title</div>
-      <div>Description</div>
-      <div>Status</div>
-      <div>Priority</div>
-      <div>Due Date</div>
-      <div class="justify-self-end">Actions</div>
-    </div>
-
-    <!-- Task List -->
-    <div>
-      <!-- Skeleton Loader -->
-      <template v-if="loading">
+      <!-- Scrollable Container -->
+      <div class="overflow-x-auto scrollbar-hide">
+        <!-- Task Table Header -->
         <div
-          v-for="n in 5"
-          :key="'skeleton-' + n"
-          class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50 animate-pulse"
+          class="grid grid-cols-6 min-w-[850px] gap-4 font-medium bg-gray-200 p-4 rounded"
         >
-          <div class="h-4 bg-gray-400 rounded w-3/4"></div>
-          <div class="h-4 bg-gray-400 rounded w-3/4"></div>
-          <div class="h-4 bg-gray-400 rounded w-full"></div>
-          <div class="h-4 bg-gray-400 rounded w-1/2"></div>
-          <div class="h-4 bg-gray-400 rounded w-full"></div>
-          <div class="h-8 bg-gray-400 rounded w-1/2 justify-self-end"></div>
+          <div>Title</div>
+          <div>Description</div>
+          <div>Status</div>
+          <div>Priority</div>
+          <div>Due Date</div>
+          <div class="justify-self-end">Actions</div>
         </div>
-      </template>
 
-      <!-- No tasks found message -->
-      <div v-else-if="tasks.length === 0" class="text-gray-500 text-center my-6">
-        No tasks found
-      </div>
-
-      <!-- Task Data -->
-      <template v-else>
-        <div
-          v-for="task in tasks"
-          :key="task._id"
-          class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50"
-        >
-          <div>{{ task.title }}</div>
-          <div
-            class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
-            :title="task.description"
-          >
-            {{ task.description }}
-          </div>
-          <div>{{ task.status }}</div>
-          <div>{{ task.priority }}</div>
-          <div
-            class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
-            :title="task.dueDate"
-          >
-            {{ formatDate(task.dueDate) }}
-          </div>
-          <div class="justify-self-end relative">
-            <button
-              @click="showActions(task._id)"
-              class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
-            >
-              Actions
-            </button>
+        <!-- Task List -->
+        <div>
+          <!-- Skeleton Loader -->
+          <template v-if="loading">
             <div
-              v-if="task._id === activeTaskId"
-              ref="actionModal"
-              class="absolute bg-white shadow-lg rounded mt-2 p-2 border z-10"
+              v-for="n in 5"
+              :key="'skeleton-' + n"
+              class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50 animate-pulse"
             >
-              <button
-                @click="openEditModal(task)"
-                class="px-2 py-1 text-sm text-blue-600 bg-blue-100 rounded hover:bg-blue-200 w-full mb-2"
-              >
-                Edit
-              </button>
-              <button
-                @click="deleteTaskData(task._id)"
-                class="px-2 py-1 text-sm text-red-600 bg-red-100 rounded hover:bg-red-200 w-full"
-              >
-                <template v-if="deleteLoading">
-                  <div
-                    class="w-5 h-5 border-2 border-red-600 border-b-transparent rounded-full inline-block animate-spin"
-                  ></div>
-                </template>
-                <template v-else>Delete</template>
-              </button>
+              <div class="h-4 bg-gray-400 rounded w-3/4"></div>
+              <div class="h-4 bg-gray-400 rounded w-3/4"></div>
+              <div class="h-4 bg-gray-400 rounded w-full"></div>
+              <div class="h-4 bg-gray-400 rounded w-1/2"></div>
+              <div class="h-4 bg-gray-400 rounded w-full"></div>
+              <div class="h-8 bg-gray-400 rounded w-1/2 justify-self-end"></div>
             </div>
+          </template>
 
-            <!-- Backdrop -->
-            <div
-              v-if="activeTaskId"
-              @click="closeActions"
-              class="fixed inset-0 bg-transparent"
-            ></div>
+          <!-- No tasks found message -->
+          <div
+            v-else-if="tasks.length === 0"
+            class="text-gray-500 text-center my-6"
+          >
+            No tasks found
           </div>
+
+          <!-- Task Data -->
+          <template v-else>
+            <div
+              v-for="task in tasks"
+              :key="task._id"
+              class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50"
+            >
+              <div>{{ task.title }}</div>
+              <div
+                class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
+                :title="task.description"
+              >
+                {{ task.description }}
+              </div>
+              <div>{{ task.status }}</div>
+              <div>{{ task.priority }}</div>
+              <div
+                class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
+                :title="task.dueDate"
+              >
+                {{ formatDate(task.dueDate) }}
+              </div>
+              <div class="justify-self-end relative">
+                <button
+                  @click="showActions(task._id)"
+                  class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+                >
+                  Actions
+                </button>
+                <div
+                  v-if="task._id === activeTaskId"
+                  ref="actionModal"
+                  class="absolute bg-white shadow-lg rounded mt-2 p-2 border z-10"
+                >
+                  <button
+                    @click="openEditModal(task)"
+                    class="px-2 py-1 text-sm text-blue-600 bg-blue-100 rounded hover:bg-blue-200 w-full mb-2"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    @click="deleteTaskData(task._id)"
+                    class="px-2 py-1 text-sm text-red-600 bg-red-100 rounded hover:bg-red-200 w-full"
+                  >
+                    <template v-if="deleteLoading">
+                      <div
+                        class="w-5 h-5 border-2 border-red-600 border-b-transparent rounded-full inline-block animate-spin"
+                      ></div>
+                    </template>
+                    <template v-else>Delete</template>
+                  </button>
+                </div>
+
+                <!-- Backdrop -->
+                <div
+                  v-if="activeTaskId"
+                  @click="closeActions"
+                  class="fixed inset-0 bg-transparent"
+                ></div>
+              </div>
+            </div>
+          </template>
         </div>
-      </template>
+      </div>
     </div>
-  </div>
-</div>
 
     <!-- Edit Task Modal -->
     <div
@@ -263,7 +295,12 @@
               type="submit"
               class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-            <template v-if="loadingEdit"><div class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"></div></template> <template v-else>Save Changes</template>
+              <template v-if="loadingEdit"
+                ><div
+                  class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"
+                ></div
+              ></template>
+              <template v-else>Save Changes</template>
             </button>
           </div>
         </form>
@@ -283,23 +320,23 @@ import {
   updateTask,
   deleteTask,
 } from "@/services/taskService"; // Import task service functions
-import { useRoute } from 'vue-router'; // Import useRoute to access route params
-import Toastify from 'toastify-js';
+import { useRoute } from "vue-router"; // Import useRoute to access route params
+import Toastify from "toastify-js";
 
-const showToast = (message, type = 'success') => {
+const showToast = (message, type = "success") => {
   Toastify({
     text: message,
     duration: 1000,
     close: true,
-    gravity: 'bottom',
-    position: 'right',
-    backgroundColor: type === 'success' ? '#4caf50' : '#f44336', // Green for success, red for error
+    gravity: "bottom",
+    position: "right",
+    backgroundColor: type === "success" ? "#4caf50" : "#f44336", // Green for success, red for error
   }).showToast();
 };
 
 const route = useRoute(); // Access the current route
 const userId = route.params.userId; // Access the userId from the route
-console.log('User ID:', userId); // Log the userId to verify
+console.log("User ID:", userId); // Log the userId to verify
 
 const router = useRouter(); // For redirection
 const userStore = useUserStore(); // Access user store
@@ -320,12 +357,12 @@ const newTaskData = ref({
 }); // Data for creating a new task
 const editTaskData = ref({}); // Data for editing a task
 const errors = ref({
-   title: '',
-   description: '',
-   status: '',
-   priority: '',
-   dueDate: '',
- });
+  title: "",
+  description: "",
+  status: "",
+  priority: "",
+  dueDate: "",
+});
 
 // Handle errors
 const handleError = (error) => {
@@ -361,13 +398,12 @@ const fetchTasksData = async () => {
     });
   } catch (error) {
     handleError(error);
-    showToast('Unkwown Error.', 'error')
+    showToast("Unkwown Error.", "error");
   } finally {
     loading.value = false;
-    showToast('Tasks Fetched!')
+    showToast("Tasks Fetched!");
   }
 };
-
 
 // Converts dd/mm/yyyy to yyyy-mm-dd
 const formatToISODate = (dateString) => {
@@ -380,7 +416,7 @@ const formatToISODate = (dateString) => {
   }
 
   // Convert dd/mm/yyyy to yyyy-mm-dd if needed
-  const [day, month, year] = dateString.split('/');
+  const [day, month, year] = dateString.split("/");
   if (day && month && year) {
     return `${year}-${month}-${day}`;
   }
@@ -389,34 +425,37 @@ const formatToISODate = (dateString) => {
   return null;
 };
 
-
-
 // Create a new task
 const createTaskData = async () => {
-
   // Validate fields
   if (!newTaskData.value.title) {
-        errors.value.title = "Title is required.";
-      }
-      if (!newTaskData.value.description) {
-        errors.value.description = "Description is required.";
-      }
-      if (!newTaskData.value.status) {
-        errors.value.status = "Stage is required.";
-      }
-      if (!newTaskData.value.priority) {
-        errors.value.priority = "Value is required."
-      }
-      if (!newTaskData.value.dueDate) {
-        errors.value.dueDate = "Priority is required.";
-      }
+    errors.value.title = "Title is required.";
+  }
+  if (!newTaskData.value.description) {
+    errors.value.description = "Description is required.";
+  }
+  if (!newTaskData.value.status) {
+    errors.value.status = "Status is required.";
+  }
+  if (!newTaskData.value.priority) {
+    errors.value.priority = "Priority is required.";
+  }
+  if (!newTaskData.value.dueDate) {
+    errors.value.dueDate = "Due date is required.";
+  }
 
-      if (!newTaskData.value.title || !newTaskData.description || !newTaskData.value.status || !newTaskData.value.priority || !newTaskData.value.dueDate ) {
+  if (
+    !newTaskData.value.title ||
+    !newTaskData.value.description ||
+    !newTaskData.value.status ||
+    !newTaskData.value.priority ||
+    !newTaskData.value.dueDate
+  ) {
     return;
   }
 
   try {
-    createLoading.value = true
+    createLoading.value = true;
 
     // Format the dueDate to ISO before sending
     const taskToSubmit = {
@@ -442,31 +481,29 @@ const createTaskData = async () => {
       dueDate: "",
     };
   } catch (error) {
-    createLoading.value = false
+    createLoading.value = false;
     console.error("Error creating task:", error);
-    showToast('Failed to create task.', 'error')
+    showToast("Failed to create task.", "error");
   } finally {
-    createLoading.value = false
-    showToast('Task Created!')
+    createLoading.value = false;
+    showToast("Task Created!");
   }
 };
-
-
 
 // Delete a task
 const deleteTaskData = async (taskId) => {
   try {
-    deleteLoading.value = true
+    deleteLoading.value = true;
     await deleteTask(taskId);
     await fetchTasksData(); // Refresh tasks after deletion
     activeTaskId.value = null;
   } catch (error) {
-    deleteLoading.value = false
+    deleteLoading.value = false;
     handleError(error);
-    showToast('Failed to delete!', 'error')
+    showToast("Failed to delete!", "error");
   } finally {
-    deleteLoading.value = false
-    showToast('Task Deleted!')
+    deleteLoading.value = false;
+    showToast("Task Deleted!");
   }
 };
 
@@ -495,12 +532,12 @@ const submitEdit = async () => {
     closeEditModal();
     activeTaskId.value = null;
   } catch (error) {
-    loadingEdit.value = false
+    loadingEdit.value = false;
     handleError(error);
-    showToast('Failed to edit task!', 'error')
+    showToast("Failed to edit task!", "error");
   } finally {
     loadingEdit.value = false;
-    showToast('Task Editted!')
+    showToast("Task Editted!");
   }
 };
 
@@ -525,4 +562,3 @@ onMounted(() => {
   }
 });
 </script>
-

@@ -446,7 +446,7 @@
 
       <!-- No Deadlines found message -->
       <div
-        v-if="!loading && upcomingDeadlines.length === 0"
+        v-if="!loading && upcomingDeadlines.data.length === 0"
         class="text-gray-500 text-center my-6"
       >
         No Deadlines found
