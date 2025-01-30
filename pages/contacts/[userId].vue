@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-8 transition-all duration-500 ease-in-out">
     <h1 class="text-3xl font-bold">Manage Contacts</h1>
-    <ContactForm @contact-created="refreshContacts" />
     <ContactList ref="contactListRef" />
+    <ContactForm @contact-created="refreshContacts" />
   </div>
 </template>
 

@@ -2,6 +2,115 @@
   <div class="p-6 max-sm:p-2">
     <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Tasks</h1>
 
+    <div>
+      <h1 class="text-2xl font-bold mb-4">Task List</h1>
+
+      <!-- Scrollable Container -->
+      <div class="overflow-x-auto scrollbar-hide mb-20 max-sm:mb-4">
+        <!-- Task Table Header -->
+        <div
+          class="grid grid-cols-6 min-w-[850px] gap-4 font-medium bg-gray-200 p-4 rounded"
+        >
+          <div>Title</div>
+          <div>Description</div>
+          <div>Status</div>
+          <div>Priority</div>
+          <div>Due Date</div>
+          <div class="justify-self-end">Actions</div>
+        </div>
+
+        <!-- Task List -->
+        <div>
+          <!-- Skeleton Loader -->
+          <template v-if="loading">
+            <div
+              v-for="n in 5"
+              :key="'skeleton-' + n"
+              class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50 animate-pulse"
+            >
+              <div class="h-4 bg-gray-400 rounded w-3/4"></div>
+              <div class="h-4 bg-gray-400 rounded w-3/4"></div>
+              <div class="h-4 bg-gray-400 rounded w-full"></div>
+              <div class="h-4 bg-gray-400 rounded w-1/2"></div>
+              <div class="h-4 bg-gray-400 rounded w-full"></div>
+              <div class="h-8 bg-gray-400 rounded w-1/2 justify-self-end"></div>
+            </div>
+          </template>
+
+          <!-- No tasks found message -->
+          <div
+            v-else-if="tasks.length === 0"
+            class="text-gray-500 text-center my-6"
+          >
+            No tasks found
+          </div>
+
+          <!-- Task Data -->
+          <template v-else>
+            <div
+              v-for="task in tasks"
+              :key="task._id"
+              class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50"
+            >
+              <div>{{ task.title }}</div>
+              <div
+                class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
+                :title="task.description"
+              >
+                {{ task.description }}
+              </div>
+              <div>{{ task.status }}</div>
+              <div>{{ task.priority }}</div>
+              <div
+                class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
+                :title="task.dueDate"
+              >
+                {{ formatDate(task.dueDate) }}
+              </div>
+              <div class="justify-self-end relative">
+                <button
+                  @click="showActions(task._id)"
+                  class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+                >
+                  Actions
+                </button>
+                <div
+                  v-if="task._id === activeTaskId"
+                  ref="actionModal"
+                  class="absolute bg-white shadow-lg rounded mt-2 p-2 border z-10"
+                >
+                  <button
+                    @click="openEditModal(task)"
+                    class="px-2 py-1 text-sm text-blue-600 bg-blue-100 rounded hover:bg-blue-200 w-full mb-2"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    @click="deleteTaskData(task._id)"
+                    class="px-2 py-1 text-sm text-red-600 bg-red-100 rounded hover:bg-red-200 w-full"
+                  >
+                    <template v-if="deleteLoading">
+                      <div
+                        class="w-5 h-5 border-2 border-red-600 border-b-transparent rounded-full inline-block animate-spin"
+                      ></div>
+                    </template>
+                    <template v-else>Delete</template>
+                  </button>
+                </div>
+
+                <!-- Backdrop -->
+                <div
+                  v-if="activeTaskId"
+                  @click="closeActions"
+                  class="fixed inset-0 bg-transparent"
+                ></div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
     <!-- Create Task Form -->
     <div class="bg-white p-8 rounded-lg shadow-lg mb-6 max-w-[37.5rem]">
       <h2 class="text-2xl font-semibold text-blue-600 mb-6">Create New Task</h2>
@@ -108,114 +217,8 @@
         </button>
       </form>
     </div>
-    <div>
-      <h1 class="text-2xl font-bold mb-4">Task List</h1>
 
-      <!-- Scrollable Container -->
-      <div class="overflow-x-auto scrollbar-hide">
-        <!-- Task Table Header -->
-        <div
-          class="grid grid-cols-6 min-w-[850px] gap-4 font-medium bg-gray-200 p-4 rounded"
-        >
-          <div>Title</div>
-          <div>Description</div>
-          <div>Status</div>
-          <div>Priority</div>
-          <div>Due Date</div>
-          <div class="justify-self-end">Actions</div>
-        </div>
-
-        <!-- Task List -->
-        <div>
-          <!-- Skeleton Loader -->
-          <template v-if="loading">
-            <div
-              v-for="n in 5"
-              :key="'skeleton-' + n"
-              class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50 animate-pulse"
-            >
-              <div class="h-4 bg-gray-400 rounded w-3/4"></div>
-              <div class="h-4 bg-gray-400 rounded w-3/4"></div>
-              <div class="h-4 bg-gray-400 rounded w-full"></div>
-              <div class="h-4 bg-gray-400 rounded w-1/2"></div>
-              <div class="h-4 bg-gray-400 rounded w-full"></div>
-              <div class="h-8 bg-gray-400 rounded w-1/2 justify-self-end"></div>
-            </div>
-          </template>
-
-          <!-- No tasks found message -->
-          <div
-            v-else-if="tasks.length === 0"
-            class="text-gray-500 text-center my-6"
-          >
-            No tasks found
-          </div>
-
-          <!-- Task Data -->
-          <template v-else>
-            <div
-              v-for="task in tasks"
-              :key="task._id"
-              class="grid grid-cols-6 min-w-[850px] gap-4 items-center border-b p-4 hover:bg-gray-50"
-            >
-              <div>{{ task.title }}</div>
-              <div
-                class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
-                :title="task.description"
-              >
-                {{ task.description }}
-              </div>
-              <div>{{ task.status }}</div>
-              <div>{{ task.priority }}</div>
-              <div
-                class="truncate overflow-hidden whitespace-nowrap text-ellipsis"
-                :title="task.dueDate"
-              >
-                {{ formatDate(task.dueDate) }}
-              </div>
-              <div class="justify-self-end relative">
-                <button
-                  @click="showActions(task._id)"
-                  class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
-                >
-                  Actions
-                </button>
-                <div
-                  v-if="task._id === activeTaskId"
-                  ref="actionModal"
-                  class="absolute bg-white shadow-lg rounded mt-2 p-2 border z-10"
-                >
-                  <button
-                    @click="openEditModal(task)"
-                    class="px-2 py-1 text-sm text-blue-600 bg-blue-100 rounded hover:bg-blue-200 w-full mb-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    @click="deleteTaskData(task._id)"
-                    class="px-2 py-1 text-sm text-red-600 bg-red-100 rounded hover:bg-red-200 w-full"
-                  >
-                    <template v-if="deleteLoading">
-                      <div
-                        class="w-5 h-5 border-2 border-red-600 border-b-transparent rounded-full inline-block animate-spin"
-                      ></div>
-                    </template>
-                    <template v-else>Delete</template>
-                  </button>
-                </div>
-
-                <!-- Backdrop -->
-                <div
-                  v-if="activeTaskId"
-                  @click="closeActions"
-                  class="fixed inset-0 bg-transparent"
-                ></div>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
+   
 
     <!-- Edit Task Modal -->
     <div

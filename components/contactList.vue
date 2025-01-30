@@ -3,7 +3,7 @@
     <h2 class="text-xl font-bold mb-4">Contact List</h2>
 
   <!-- Scrollable Container -->
-  <div class="overflow-x-auto scrollbar-hide">
+  <div class="overflow-x-auto scrollbar-hide mb-20 max-sm:mb-4">
     <!-- Table Header -->
     <div class="grid grid-cols-6 min-w-[850px] gap-4 font-medium bg-gray-200 p-4 rounded">
       <div>First Name</div>

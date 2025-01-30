@@ -4,142 +4,6 @@
       Sales Opportunities
     </h1>
 
-    <div class="bg-white p-8 rounded-lg shadow-lg max-w-[37.5rem]">
-      <h2 class="text-2xl font-semibold text-blue-600 mb-6">
-        Create New Opportunity
-      </h2>
-      <form @submit.prevent="createOpportunityData" class="space-y-6">
-        <!-- Title -->
-        <div>
-          <label for="title" class="block text-sm font-medium text-gray-700"
-            >Title</label
-          >
-          <input
-            type="text"
-            id="title"
-            v-model="newOpportunity.title"
-            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            :class="{ 'border-red-500': errors.title }"
-          />
-          <p v-if="errors.title" class="mt-2 text-sm text-red-600">
-            {{ errors.title }}
-          </p>
-        </div>
-
-        <!-- Description -->
-        <div>
-          <label
-            for="description"
-            class="block text-sm font-medium text-gray-700"
-            >Description</label
-          >
-          <textarea
-            id="description"
-            v-model="newOpportunity.description"
-            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg resize-none"
-            rows="4"
-            :class="{ 'border-red-500': errors.description }"
-          ></textarea>
-          <p v-if="errors.description" class="mt-2 text-sm text-red-600">
-            {{ errors.description }}
-          </p>
-        </div>
-
-        <!-- Stage -->
-        <div>
-          <label for="stage" class="block text-sm font-medium text-gray-700"
-            >Stage</label
-          >
-          <select
-            id="stage"
-            v-model="newOpportunity.stage"
-            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            :class="{ 'border-red-500': errors.stage }"
-          >
-            <option value=""></option>
-            <option value="Prospect">Prospect</option>
-            <option value="Qualified">Qualified</option>
-            <option value="Negotiation">Negotiation</option>
-            <option value="Closed Won">Closed Won</option>
-            <option value="Closed Lost">Closed Lost</option>
-          </select>
-          <p v-if="errors.stage" class="mt-2 text-sm text-red-600">
-            {{ errors.stage }}
-          </p>
-        </div>
-
-        <!-- Value -->
-        <div>
-          <label for="value" class="block text-sm font-medium text-gray-700"
-            >Value</label
-          >
-          <input
-            type="number"
-            id="value"
-            v-model="newOpportunity.value"
-            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            :class="{ 'border-red-500': errors.value }"
-          />
-          <p v-if="errors.value" class="mt-2 text-sm text-red-600">
-            {{ errors.value }}
-          </p>
-        </div>
-
-        <!-- Expected Close Date -->
-        <div>
-          <label
-            for="expectedCloseDate"
-            class="block text-sm font-medium text-gray-700"
-            >Expected Close Date</label
-          >
-          <input
-            type="date"
-            id="expectedCloseDate"
-            v-model="newOpportunity.expectedCloseDate"
-            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            :class="{ 'border-red-500': errors.expectedCloseDate }"
-          />
-          <p v-if="errors.expectedCloseDate" class="mt-2 text-sm text-red-600">
-            {{ errors.expectedCloseDate }}
-          </p>
-        </div>
-
-        <!-- Priority -->
-        <div>
-          <label for="priority" class="block text-sm font-medium text-gray-700"
-            >Priority</label
-          >
-          <select
-            id="priority"
-            v-model="newOpportunity.priority"
-            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
-            :class="{ 'border-red-500': errors.priority }"
-          >
-            <option value=""></option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-          <p v-if="errors.priority" class="mt-2 text-sm text-red-600">
-            {{ errors.priority }}
-          </p>
-        </div>
-
-        <!-- Submit Button -->
-        <button
-          type="submit"
-          class="w-full mt-4 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 text-lg"
-        >
-          <template v-if="createLoading">
-            <div
-              class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"
-            ></div>
-          </template>
-          <template v-else>Create Opportunity</template>
-        </button>
-      </form>
-    </div>
-
     <!-- Opportunities List -->
     <div v-if="loading" class="mt-8">
       <h2 class="text-2xl font-semibold text-gray-900 mb-6">
@@ -166,8 +30,47 @@
         </div>
       </div>
     </div>
+
     <div v-if="error" class="text-center text-red-500 mt-8">
       Error loading opportunities
+    </div>
+
+    <div v-if="!loading && !error && opportunities.length > 0" class="mt-8 mb-20 max-sm:mb-4">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-6">
+        Existing Opportunities
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          v-for="opportunity in opportunities"
+          :key="opportunity._id"
+          class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+          <h3 class="text-lg font-semibold text-gray-800">
+            {{ opportunity.title }}
+          </h3>
+          <p class="text-sm text-gray-500 mt-1">
+            {{ opportunity.stage }} - {{ opportunity.priority }}
+          </p>
+          <p class="text-lg font-bold text-indigo-600 mt-2">
+            {{ formatCurrency(opportunity.value) }}
+          </p>
+          <p class="text-sm text-gray-600 mt-2">
+            Expected Close: {{ formatDate(opportunity.expectedCloseDate) }}
+          </p>
+          <button
+            @click="openModal(opportunity)"
+            class="mt-4 mb-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 w-full outline-none"
+          >
+            Update Opportunity
+          </button>
+          <button
+            @click="confirmDelete(opportunity)"
+            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 w-full outline-none"
+          >
+            Delete Opportunity
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Modal for Editing Opportunity -->
@@ -304,43 +207,142 @@
       </div>
     </div>
 
-    <div v-if="!loading && !error && opportunities.length > 0" class="mt-8">
-      <h2 class="text-2xl font-semibold text-gray-900 mb-6">
-        Existing Opportunities
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-[37.5rem]">
+      <h2 class="text-2xl font-semibold text-blue-600 mb-6">
+        Create New Opportunity
       </h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div
-          v-for="opportunity in opportunities"
-          :key="opportunity._id"
-          class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-        >
-          <h3 class="text-lg font-semibold text-gray-800">
-            {{ opportunity.title }}
-          </h3>
-          <p class="text-sm text-gray-500 mt-1">
-            {{ opportunity.stage }} - {{ opportunity.priority }}
-          </p>
-          <p class="text-lg font-bold text-indigo-600 mt-2">
-            {{ formatCurrency(opportunity.value) }}
-          </p>
-          <p class="text-sm text-gray-600 mt-2">
-            Expected Close: {{ formatDate(opportunity.expectedCloseDate) }}
-          </p>
-          <button
-            @click="openModal(opportunity)"
-            class="mt-4 mb-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 w-full outline-none"
+      <form @submit.prevent="createOpportunityData" class="space-y-6">
+        <!-- Title -->
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700"
+            >Title</label
           >
-            Update Opportunity
-          </button>
-          <button
-            @click="confirmDelete(opportunity)"
-            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 w-full outline-none"
-          >
-            Delete Opportunity
-          </button>
+          <input
+            type="text"
+            id="title"
+            v-model="newOpportunity.title"
+            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            :class="{ 'border-red-500': errors.title }"
+          />
+          <p v-if="errors.title" class="mt-2 text-sm text-red-600">
+            {{ errors.title }}
+          </p>
         </div>
-      </div>
+
+        <!-- Description -->
+        <div>
+          <label
+            for="description"
+            class="block text-sm font-medium text-gray-700"
+            >Description</label
+          >
+          <textarea
+            id="description"
+            v-model="newOpportunity.description"
+            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg resize-none"
+            rows="4"
+            :class="{ 'border-red-500': errors.description }"
+          ></textarea>
+          <p v-if="errors.description" class="mt-2 text-sm text-red-600">
+            {{ errors.description }}
+          </p>
+        </div>
+
+        <!-- Stage -->
+        <div>
+          <label for="stage" class="block text-sm font-medium text-gray-700"
+            >Stage</label
+          >
+          <select
+            id="stage"
+            v-model="newOpportunity.stage"
+            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            :class="{ 'border-red-500': errors.stage }"
+          >
+            <option value=""></option>
+            <option value="Prospect">Prospect</option>
+            <option value="Qualified">Qualified</option>
+            <option value="Negotiation">Negotiation</option>
+            <option value="Closed Won">Closed Won</option>
+            <option value="Closed Lost">Closed Lost</option>
+          </select>
+          <p v-if="errors.stage" class="mt-2 text-sm text-red-600">
+            {{ errors.stage }}
+          </p>
+        </div>
+
+        <!-- Value -->
+        <div>
+          <label for="value" class="block text-sm font-medium text-gray-700"
+            >Value</label
+          >
+          <input
+            type="number"
+            id="value"
+            v-model="newOpportunity.value"
+            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            :class="{ 'border-red-500': errors.value }"
+          />
+          <p v-if="errors.value" class="mt-2 text-sm text-red-600">
+            {{ errors.value }}
+          </p>
+        </div>
+
+        <!-- Expected Close Date -->
+        <div>
+          <label
+            for="expectedCloseDate"
+            class="block text-sm font-medium text-gray-700"
+            >Expected Close Date</label
+          >
+          <input
+            type="date"
+            id="expectedCloseDate"
+            v-model="newOpportunity.expectedCloseDate"
+            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            :class="{ 'border-red-500': errors.expectedCloseDate }"
+          />
+          <p v-if="errors.expectedCloseDate" class="mt-2 text-sm text-red-600">
+            {{ errors.expectedCloseDate }}
+          </p>
+        </div>
+
+        <!-- Priority -->
+        <div>
+          <label for="priority" class="block text-sm font-medium text-gray-700"
+            >Priority</label
+          >
+          <select
+            id="priority"
+            v-model="newOpportunity.priority"
+            class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-lg"
+            :class="{ 'border-red-500': errors.priority }"
+          >
+            <option value=""></option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <p v-if="errors.priority" class="mt-2 text-sm text-red-600">
+            {{ errors.priority }}
+          </p>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full mt-4 px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 text-lg"
+        >
+          <template v-if="createLoading">
+            <div
+              class="w-5 h-5 border-2 border-white border-b-transparent rounded-full inline-block animate-spin"
+            ></div>
+          </template>
+          <template v-else>Create Opportunity</template>
+        </button>
+      </form>
     </div>
+
 
     <!-- Delete Confirmation Modal -->
     <div
