@@ -13,12 +13,20 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
         </svg>
       </button>
+
+      <!-- Logout button (Desktop & Tablet) -->
+      <button
+        @click="handleLogout"
+        class="hidden sm:block p-2 bg-red-600 text-white rounded hover:bg-red-700"
+      >
+        Logout
+      </button>
     </nav>
 
     <!-- Main Container -->
     <div class="flex pt-16">
       <!-- Sidebar (Desktop) -->
-      <aside class="w-1/4 bg-gray-100 h-screen p-4 fixed top-16 left-0 z-10 hidden sm:block">
+      <aside class="w-1/4 bg-gray-100 h-screen p-4 fixed top-16 left-0 z-10 flex flex-col justify-between max-sm:hidden">
         <ul>
           <li v-for="link in links" :key="link.name">
             <NuxtLink
@@ -29,13 +37,20 @@
             </NuxtLink>
           </li>
         </ul>
+        <!-- Logout button (Desktop) -->
+        <button
+          @click="handleLogout"
+          class="block p-2 mt-4 bg-red-600 text-white rounded hover:bg-red-700 self-center"
+        >
+          Logout
+        </button>
       </aside>
 
       <!-- Hamburger Menu (Mobile) -->
       <transition name="slide-fade">
         <div
           v-if="isMenuOpen"
-          class="fixed top-16 left-0 w-3/4 bg-gray-100 h-screen p-4 z-10 sm:hidden max-sm:z-[1]"
+          class="fixed h-fill-available top-16 left-0 w-3/4 bg-gray-100 p-4 z-10 sm:hidden max-sm:z-[1] flex flex-col justify-between"
         >
           <ul>
             <li v-for="link in links" :key="link.name">
@@ -48,6 +63,13 @@
               </NuxtLink>
             </li>
           </ul>
+          <!-- Logout button (Mobile) at the bottom -->
+          <button
+            @click="handleLogout"
+            class="block p-2 mt-4 bg-red-600 text-white rounded hover:bg-red-700 self-baseline"
+          >
+            Logout
+          </button>
         </div>
       </transition>
 
@@ -61,7 +83,7 @@
 
 <script>
 import { useUserStore } from '~/store/userStore';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';  // Import useRouter
 import { ref, computed } from 'vue';
 
 export default {
@@ -70,6 +92,7 @@ export default {
   setup() {
     const userStore = useUserStore();
     const route = useRoute();
+    const router = useRouter();  // Get the router instance
     const isMenuOpen = ref(false);
 
     // Define navigation links dynamically based on user ID
@@ -104,7 +127,12 @@ export default {
         : 'block p-2 hover:bg-gray-200'; // Default styles
     };
 
-    return { userStore, links, getLinkClass, isMenuOpen, toggleMenu, closeMenu };
+    // Handle logout functionality
+    const handleLogout = () => {
+      userStore.logout(router);  // Pass the router instance here
+    };
+
+    return { userStore, links, getLinkClass, isMenuOpen, toggleMenu, closeMenu, handleLogout };
   },
 };
 </script>

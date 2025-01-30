@@ -19,6 +19,9 @@ export default {
           '100%': { transform: 'rotate(360deg)' },
         },
       },
+      height: {
+        'fill-available': '-webkit-fill-available',
+      },
     },
   },
   plugins: [
