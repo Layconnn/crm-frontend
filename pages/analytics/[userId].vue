@@ -150,6 +150,7 @@ const loadAnalytics = async () => {
       labels: data.salesAnalytics.salesByStage.map(item => item._id),
       datasets: [{
         label: 'Sales by Stage',
+        type: 'line',
         data: data.salesAnalytics.salesByStage.map(item => item.count),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',  // Negotiation color
